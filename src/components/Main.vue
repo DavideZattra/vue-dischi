@@ -6,9 +6,9 @@
 
       <div v-if="visualize" class="row p-5">
 
-        <Select :albumList="albumList"/>
+        <Select :albumList="albumList" @Change="filterAlbumList" />
 
-        <div  v-for="(element, index) in albumList" :key='index' class="m-3 col-2 ms_album-box">
+        <div  v-for="(element, index) in filteredAlbumList" :key='index' class="m-3 col-2 ms_album-box">
           
           <AlbumBox :album="element"/>
 
@@ -46,7 +46,27 @@ export default {
   data: function(){
     return{
       albumList : [],
+      filteredAlbumList : [],
       visualize : false,
+    }
+  },
+
+  methods : {
+    filterAlbumList(filter){
+      console.log(filter)
+      if (filter == 'All'){
+        console.log('filtro è uguale a All')
+        this.filteredAlbumList = [...this.albumList]
+      } else {
+
+        this.filteredAlbumList = this.albumList.filter((element) => element.genre == filter)
+      }
+
+      // this.filteredAlbumList = this.albumList.filter((element) => 
+
+      //   element.genre == filter
+
+      // );
     }
   },
 
@@ -54,7 +74,7 @@ export default {
     axios.get('https://flynn.boolean.careers/exercises/api/array/music')
     .then ((answer) => {
       this.albumList = [...answer.data.response];
-      console.log(this.albumList)
+      
     });
     setTimeout(() => {
       this.visualize = true;

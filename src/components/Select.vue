@@ -4,12 +4,11 @@
 
         <label class="text-white pe-3" for="ms_select">Choose a filter:</label>
 
-        <select id="ms_select">
+        <select id="ms_select"  @change="getSelectValue(), $emit('Change', selectValue)" >
 
-            <option value="all">All</option>
+            <option value="All">All</option>
             <option v-for='(element, index) in optionArray' :key='index' :value="element"> {{ element }}</option>
             
-
         </select> 
 
     </div>
@@ -23,6 +22,14 @@ export default {
     data : function(){
         return{
             optionArray : [],
+            selectValue : 'All',
+        }
+    },
+
+    methods : {
+        getSelectValue(){
+            this.selectValue = document.getElementById('ms_select').value;
+            
         }
     },
 
@@ -32,7 +39,7 @@ export default {
             if (!this.optionArray.includes(genre)){
                 this.optionArray.push(genre)
             }
-            console.log(this.optionArray)
+            
         });
     }
 
@@ -49,3 +56,13 @@ label{
 
 
 </style>
+
+function filteredItems(array, filter){
+
+    if (filter.trim().toLowerCase() === 'all'){
+        return array
+    }
+
+    return array.filter((element) => element.type == filter);
+        
+}
